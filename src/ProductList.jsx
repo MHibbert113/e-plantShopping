@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+import { addItem } from './CartSlice';
+import { useDispatch } from 'react-redux';
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+    const [addedToCart, setAddedToCart] = useState({});
+    const dispatch = useDispatch();
+
+ const handleAddToCart = (plant) => {
+
+  dispatch(addItem(plant)); // Dispatch the action to add the plant to the cart
+
+  setAddedToCart((prevState) => ({
+    ...prevState,
+    [plant.name]: true,
+  }));
+};
 
     const plantsArray = [
         {
@@ -274,6 +288,34 @@ function ProductList({ onHomeClick }) {
             </div>
             {!showCart ? (
                 <div className="product-grid">
+                    {plantsArray.map((category, index) => ( // Loop through each category in plantsArray
+  <div key={index}> {/* Unique key for each category div */}
+    <h1>
+      <div>{category.category}</div> {/* Display the category name */}
+    </h1>
+    <div className="product-list"> {/* Container for the list of plant cards */}
+      {category.plants.map((plant, plantIndex) => ( // Loop through each plant in the current category
+        <div className="product-card" key={plantIndex}> {/* Unique key for each plant card */}
+          <img 
+            className="product-image" 
+            src={plant.image} // Display the plant image
+            alt={plant.name} // Alt text for accessibility
+          />
+          <div className="product-title">{plant.name}</div> {/* Display plant name */}
+          {/* Display other plant details like description and cost */}
+          <div className="product-description">{plant.description}</div> {/* Display plant description */}
+          <div className="product-cost">{plant.cost}</div> {/* Display plant cost */}
+          <button
+            className="product-button"
+            onClick={() => handleAddToCart(plant)} // Handle adding plant to cart
+          >
+            Add to Cart
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+))}
 
 
                 </div>
@@ -283,5 +325,6 @@ function ProductList({ onHomeClick }) {
         </div>
     );
 }
+
 
 export default ProductList;
