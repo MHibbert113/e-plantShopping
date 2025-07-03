@@ -315,6 +315,7 @@ function ProductList({ onHomeClick }) {
                                     ))}
                                   </div>
                                 </div>
+                                
                               ))}
 
 
@@ -324,6 +325,7 @@ function ProductList({ onHomeClick }) {
             )}
         </div>
     );
+    dispatch(addItem(product));
 }
 
 export default ProductList;
